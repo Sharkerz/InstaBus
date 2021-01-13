@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">InstaBus</string>
+    <string name="title_list">List</string>
+    <string name="title_map">Map</string>
+
+    <string name="test_item">item</string>
+</resources>

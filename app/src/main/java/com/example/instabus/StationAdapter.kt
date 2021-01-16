@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class StationAdapter(private val stationList: List<StationItem>) : RecyclerView.Adapter<StationAdapter.StationViewHolder>() {
+class StationAdapter(private val stationList: List<Station>) : RecyclerView.Adapter<StationAdapter.StationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.station_item, parent, false)
@@ -17,7 +17,7 @@ class StationAdapter(private val stationList: List<StationItem>) : RecyclerView.
     override fun onBindViewHolder(holder: StationViewHolder, position: Int) {
         var currentItem = stationList[position]
 
-        holder.name.text = currentItem.name
+        holder.name.text = currentItem.street_name
     }
 
     override fun getItemCount() = stationList.size

@@ -1,5 +1,6 @@
 package com.example.instabus.ui.Map
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.instabus.MainActivity
 import com.example.instabus.R
 import com.example.instabus.Station
+import com.example.instabus.StationDetailActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,11 +22,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_station_detail.*
 import kotlinx.android.synthetic.main.fragment_map.*
 
 
-class MapFragment : Fragment(), OnMapReadyCallback{
+class MapFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickListener{
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
   }
@@ -55,6 +56,7 @@ class MapFragment : Fragment(), OnMapReadyCallback{
         MarkerOptions()
           .position(LatLng(station.lat.toDouble(),station.lon.toDouble()))
           .title(station.street_name)
+          .snippet(station.id.toString())
       )
     }
     googleMap.uiSettings.isZoomControlsEnabled = true
@@ -82,6 +84,7 @@ class MapFragment : Fragment(), OnMapReadyCallback{
   }
 
   private fun setUpMap() {
+    googleMap.setOnMarkerClickListener(this);
     if (ActivityCompat.checkSelfPermission(requireActivity(),
         android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(requireActivity(),
@@ -100,6 +103,13 @@ class MapFragment : Fragment(), OnMapReadyCallback{
     }
   }
 
+  override fun onMarkerClick(marker: Marker): Boolean {
+      val intent = Intent(requireActivity(), StationDetailActivity::class.java)
+      intent.putExtra("street_name", marker.title)
+      intent.putExtra("id",marker.snippet.toInt())
+      startActivity(intent)
+    return true
+  }
 
 
 }

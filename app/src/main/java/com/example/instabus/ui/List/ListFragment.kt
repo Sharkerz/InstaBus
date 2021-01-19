@@ -46,7 +46,7 @@ class ListFragment : Fragment(), OnStationClickListener {
     override fun onItemClick(item: Station, position: Int) {
         val intent = Intent(requireActivity(), StationDetailActivity::class.java)
         intent.putExtra("street_name", item.street_name)
-
+        intent.putExtra("id",item.id)
         startActivity(intent)
     }
 

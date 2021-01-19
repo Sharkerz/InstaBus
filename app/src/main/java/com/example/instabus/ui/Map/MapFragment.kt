@@ -22,10 +22,11 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.ClusterManager
 import kotlinx.android.synthetic.main.fragment_map.*
 
 
-class MapFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickListener{
+class MapFragment : Fragment(), OnMapReadyCallback,ClusterManager.OnClusterItemClickListener<mapItem>{
   companion object {
     private const val LOCATION_PERMISSION_REQUEST_CODE = 1
   }
@@ -36,6 +37,7 @@ class MapFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickListen
   private lateinit var listStation: List<Station>;
   private lateinit var lastLocation: Location
   private lateinit var fusedLocationClient: FusedLocationProviderClient
+  private lateinit var clusterManager: ClusterManager<mapItem>
 
   override fun onActivityCreated(savedInstanceState: Bundle?) {
     super.onActivityCreated(savedInstanceState)
@@ -51,20 +53,12 @@ class MapFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickListen
     if(map != null){
       googleMap = map
     }
-    for(station in listStation){
-      googleMap.addMarker(
-        MarkerOptions()
-          .position(LatLng(station.lat.toDouble(),station.lon.toDouble()))
-          .title(station.street_name)
-          .snippet(station.id.toString())
-      )
-    }
     googleMap.uiSettings.isZoomControlsEnabled = true
     googleMap.uiSettings.isMapToolbarEnabled = false
     googleMap.uiSettings.isMyLocationButtonEnabled = true
     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Barcelone,17f))
+    setUpClusterer()
     setUpMap()
-
   }
 
   override fun onCreateView(
@@ -84,7 +78,7 @@ class MapFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickListen
   }
 
   private fun setUpMap() {
-    googleMap.setOnMarkerClickListener(this);
+
     if (ActivityCompat.checkSelfPermission(requireActivity(),
         android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
       ActivityCompat.requestPermissions(requireActivity(),
@@ -103,12 +97,41 @@ class MapFragment : Fragment(), OnMapReadyCallback,GoogleMap.OnMarkerClickListen
     }
   }
 
-  override fun onMarkerClick(marker: Marker): Boolean {
-      val intent = Intent(requireActivity(), StationDetailActivity::class.java)
-      intent.putExtra("street_name", marker.title)
-      intent.putExtra("id",marker.snippet.toInt())
-      startActivity(intent)
+  override fun onClusterItemClick(item: mapItem?): Boolean {
+    val intent = Intent(requireActivity(), StationDetailActivity::class.java)
+    if (item != null) {
+      intent.putExtra("street_name", item.title)
+      item.snippet?.let { intent.putExtra("id", it) }
+    }
+    startActivity(intent)
     return true
+  }
+
+  private fun setUpClusterer() {
+    // Position the map.
+    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Barcelone, 17f))
+
+    // Initialize the manager with the context and the map.
+    // (Activity extends context, so we can pass 'this' in the constructor.)
+    clusterManager = ClusterManager(context, googleMap)
+    clusterManager!!.setOnClusterItemClickListener(this)
+
+    // Point the map's listeners at the listeners implemented by the cluster
+    // manager.
+    googleMap.setOnCameraIdleListener(clusterManager)
+    googleMap.setOnMarkerClickListener(clusterManager)
+
+    // Add cluster items (markers) to the cluster manager.
+    addItems()
+  }
+
+  private fun addItems() {
+    // Add ten cluster items in close proximity, for purposes of this example.
+    for (station in listStation) {
+      val offsetItem =
+        mapItem(station.lat.toDouble(),station.lon.toDouble(),station.street_name, station.id.toString())
+      clusterManager.addItem(offsetItem)
+    }
   }
 
 

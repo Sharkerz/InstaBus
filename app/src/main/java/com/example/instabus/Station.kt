@@ -1,6 +1,7 @@
 package com.example.instabus
 
 import com.google.gson.annotations.SerializedName
+import com.google.maps.android.clustering.ClusterItem
 import retrofit2.Call
 import retrofit2.http.GET
 

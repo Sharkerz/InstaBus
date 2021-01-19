@@ -14,7 +14,9 @@ class StationDetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_station_detail)
 
         val street_name = getIntent().getStringExtra("street_name")
+        val id = getIntent().getStringExtra("id")
 
         binding.streetName.setText(street_name)
+        binding.id.setText(id)
     }
 }

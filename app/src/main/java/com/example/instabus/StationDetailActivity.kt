@@ -42,7 +42,7 @@ class StationDetailActivity : AppCompatActivity() {
         var rs = db.rawQuery("SELECT * FROM PICTURE WHERE ID_station = $id", null)
 
         while (rs.moveToNext()) {
-            var picture = Picture(rs.getString(1), rs.getBlob(2))
+            var picture = Picture(rs.getInt(0), rs.getString(1), rs.getBlob(2))
             listPicture.add(picture)
         }
 
@@ -50,9 +50,9 @@ class StationDetailActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PictureAdapter(listPicture)
 
-//        val img = Utils.getImage(rs.getBlob(2))
-//        val test = findViewById<ImageView>(R.id.test)
-//        test.setImageBitmap(img)
+        for (i in listPicture) {
+            println(i.id)
+        }
 
         //Button take picture
         val button = findViewById<FloatingActionButton>(R.id.addPictureButton)

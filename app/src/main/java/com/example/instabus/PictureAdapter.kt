@@ -8,8 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instabus.Utils.Utils
 
-class PictureAdapter(private val pictureList: List<Picture>) : RecyclerView.Adapter<PictureAdapter.PictureViewHolder>() {
-
+class PictureAdapter(private val pictureList: MutableList<Picture>) : RecyclerView.Adapter<PictureAdapter.PictureViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.picture_item, parent, false)
 
@@ -30,5 +29,11 @@ class PictureAdapter(private val pictureList: List<Picture>) : RecyclerView.Adap
         val name: TextView = itemView.findViewById(R.id.title)
         val picture: ImageView = itemView.findViewById(R.id.picture)
 
+    }
+
+    //Delete Item
+    fun deleteItem(pos:Int){
+        pictureList.removeAt(pos)
+        notifyItemRemoved(pos)
     }
 }

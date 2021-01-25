@@ -19,8 +19,9 @@ import com.example.instabus.databinding.ActivityStationDetailBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.station_item.*
 import com.example.instabus.Utils.*
+import androidx.recyclerview.widget.ItemTouchHelper
 
-class StationDetailActivity : AppCompatActivity() {
+class StationDetailActivity : AppCompatActivity(){
     lateinit var binding: ActivityStationDetailBinding
     internal lateinit var dbHelper: DBHelper
     private lateinit var recyclerView: RecyclerView;
@@ -30,7 +31,6 @@ class StationDetailActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_station_detail)
 
         var listPicture : MutableList<Picture> = mutableListOf()
-
         val street_name = getIntent().getStringExtra("street_name")
         val id = getIntent().getStringExtra("id")
 
@@ -50,9 +50,8 @@ class StationDetailActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PictureAdapter(listPicture)
 
-        for (i in listPicture) {
-            println(i.id)
-        }
+        var itemTouchHelper = ItemTouchHelper(SwipeToDelete(recyclerView.adapter as PictureAdapter))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
         //Button take picture
         val button = findViewById<FloatingActionButton>(R.id.addPictureButton)

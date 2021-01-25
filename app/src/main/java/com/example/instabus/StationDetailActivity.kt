@@ -1,30 +1,23 @@
 package com.example.instabus
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.Adapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instabus.DBHelper.DBHelper
-import com.example.instabus.Utils.Utils
 import com.example.instabus.databinding.ActivityStationDetailBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.station_item.*
-import com.example.instabus.Utils.*
-import androidx.recyclerview.widget.ItemTouchHelper
+import kotlinx.android.synthetic.main.station_item.view.*
 
 class StationDetailActivity : AppCompatActivity(){
     lateinit var binding: ActivityStationDetailBinding
-    internal lateinit var dbHelper: DBHelper
+    lateinit var dbHelper: DBHelper
     private lateinit var recyclerView: RecyclerView;
+    private var adapter: PictureAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,18 +43,42 @@ class StationDetailActivity : AppCompatActivity(){
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PictureAdapter(listPicture)
 
-        var itemTouchHelper = ItemTouchHelper(SwipeToDelete(recyclerView.adapter as PictureAdapter))
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+//        var itemTouchHelper = ItemTouchHelper(SwipeToDelete(recyclerView.adapter as PictureAdapter))
+//        itemTouchHelper.attachToRecyclerView(recyclerView)
 
         //Button take picture
         val button = findViewById<FloatingActionButton>(R.id.addPictureButton)
         button.setOnClickListener {
             val intent = Intent(this, TakePictureActivity::class.java)
-            intent.putExtra("id",id)
-            intent.putExtra("street_name",street_name)
+            intent.putExtra("id", id)
+            intent.putExtra("street_name", street_name)
             startActivity(intent)
         }
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+               return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                adapter = recyclerView.adapter as PictureAdapter
+                var pos = viewHolder.adapterPosition
+                if (adapter != null) {
+                    adapter!!.deleteItem(pos)
+                    var item_id = viewHolder.itemView.tag
+
+                    //delete in database
+                    var db_itemDelete = dbHelper.writableDatabase
+                    var rs_itemDelete = db_itemDelete.rawQuery("DELETE FROM PICTURE WHERE ID = $item_id", null)
+                    rs_itemDelete.moveToFirst()
+                }
+            }
+        }).attachToRecyclerView(recyclerView)
+
     }
+
+
 
 
 }

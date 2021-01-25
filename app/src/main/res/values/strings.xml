@@ -5,5 +5,7 @@
 
     <string name="test_item">item</string>
 
-    <string name="OK">OK</string>
+    <!-- Layout create picture -->
+    <string name="OK">Enregistrer</string>
+    <string name="placeHolderTakePicture">Titre de l\'image</string>
 </resources>

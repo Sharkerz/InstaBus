@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.instabus.DBHelper.DBHelper
 import com.example.instabus.Utils.Utils
+import androidx.core.app.ActivityCompat
+import androidx.core.view.get
 
 class PictureAdapter(private val pictureList: MutableList<Picture>) : RecyclerView.Adapter<PictureAdapter.PictureViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder {
@@ -19,8 +22,9 @@ class PictureAdapter(private val pictureList: MutableList<Picture>) : RecyclerVi
         var currentItem = pictureList[position]
         var image = Utils.getImage(currentItem.image)
 
-        holder.name.text = currentItem.title
+        holder.name.setText(currentItem.title)
         holder.picture.setImageBitmap(image)
+        holder.itemView.setTag(currentItem.id);
     }
 
     override fun getItemCount() = pictureList.size
@@ -34,6 +38,6 @@ class PictureAdapter(private val pictureList: MutableList<Picture>) : RecyclerVi
     //Delete Item
     fun deleteItem(pos:Int){
         pictureList.removeAt(pos)
-        notifyItemRemoved(pos)
+        notifyDataSetChanged()
     }
 }

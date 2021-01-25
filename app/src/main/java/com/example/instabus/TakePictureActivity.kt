@@ -1,6 +1,5 @@
 package com.example.instabus
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -16,10 +15,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.instabus.DBHelper.DBHelper
 import com.example.instabus.Utils.Utils
-import com.example.instabus.ui.Map.MapFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_take_picture.*
-import kotlinx.android.synthetic.main.station_item.*
 import kotlinx.android.synthetic.main.station_item.imageView
 
 private var REQUEST_CODE = 42

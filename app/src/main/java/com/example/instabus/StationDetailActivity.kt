@@ -2,7 +2,8 @@ package com.example.instabus
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Adapter
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -12,6 +13,7 @@ import com.example.instabus.DBHelper.DBHelper
 import com.example.instabus.databinding.ActivityStationDetailBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.station_item.view.*
+
 
 class StationDetailActivity : AppCompatActivity(){
     lateinit var binding: ActivityStationDetailBinding
@@ -26,6 +28,13 @@ class StationDetailActivity : AppCompatActivity(){
         var listPicture : MutableList<Picture> = mutableListOf()
         val street_name = getIntent().getStringExtra("street_name")
         val id = getIntent().getStringExtra("id")
+
+
+        // showing the back button in action bar
+        val actionBar: ActionBar? = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
 
         binding.stationName.setText(street_name)
 
@@ -58,7 +67,7 @@ class StationDetailActivity : AppCompatActivity(){
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-               return false
+                return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -78,7 +87,16 @@ class StationDetailActivity : AppCompatActivity(){
 
     }
 
-
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.getItemId()) {
+        android.R.id.home -> {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            return true
+        }
+    }
+    return super.onOptionsItemSelected(item)
+}
 
 
 }

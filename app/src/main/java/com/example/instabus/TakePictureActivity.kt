@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import com.example.instabus.DBHelper.DBHelper
 import com.example.instabus.Utils.Utils
@@ -27,6 +29,12 @@ class TakePictureActivity : AppCompatActivity() {
         setContentView(R.layout.activity_take_picture)
         val id = getIntent().getStringExtra("id")
         val street_name = getIntent().getStringExtra("street_name")
+
+        // showing the back button in action bar
+        val actionBar: ActionBar? = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+        }
 
         checkPermissions()
 
@@ -100,5 +108,16 @@ class TakePictureActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

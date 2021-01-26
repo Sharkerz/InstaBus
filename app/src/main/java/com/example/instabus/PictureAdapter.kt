@@ -21,10 +21,12 @@ class PictureAdapter(private val pictureList: MutableList<Picture>) : RecyclerVi
     override fun onBindViewHolder(holder: PictureViewHolder, position: Int) {
         var currentItem = pictureList[position]
         var image = Utils.getImage(currentItem.image)
+        var current_date = currentItem.date
 
         holder.name.setText(currentItem.title)
         holder.picture.setImageBitmap(image)
-        holder.itemView.setTag(currentItem.id);
+        holder.itemView.setTag(currentItem.id)
+        holder.date.setText("Ajouté le : $current_date")
     }
 
     override fun getItemCount() = pictureList.size
@@ -32,6 +34,7 @@ class PictureAdapter(private val pictureList: MutableList<Picture>) : RecyclerVi
     class PictureViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.title)
         val picture: ImageView = itemView.findViewById(R.id.picture)
+        val date: TextView = itemView.findViewById(R.id.date)
 
     }
 

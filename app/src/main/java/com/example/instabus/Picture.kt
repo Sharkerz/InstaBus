@@ -5,5 +5,6 @@ import java.sql.Blob
 data class Picture (
     val id: Int,
     val title: String,
-    val image: ByteArray
+    val image: ByteArray,
+    val date : String
         )

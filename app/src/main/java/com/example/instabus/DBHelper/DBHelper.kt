@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteQueryBuilder
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper
+import kotlin.jvm.Throws
 
 class DBHelper(context: Context): SQLiteAssetHelper(context, DB_NAME, null, DB_VER) {
     companion object {
@@ -15,13 +16,15 @@ class DBHelper(context: Context): SQLiteAssetHelper(context, DB_NAME, null, DB_V
         private val COl_ID_STATION = "ID_station"
         private val COl_TITLE = "Title"
         private val COl_IMAGE = "Image"
+        private val COL_DATE = "Date"
     }
 
     @Throws(SQLiteException::class)
-    fun addBitmap(id: Int, title:String, image:ByteArray) {
+    fun addBitmap(id: Int, title:String, image:ByteArray,date : String) {
         val database = this.writableDatabase
         val cv = ContentValues()
 
+        cv.put(COL_DATE, date)
         cv.put(COl_TITLE, title)
         cv.put(COl_IMAGE, image)
         cv.put(COl_ID_STATION, id)

@@ -44,9 +44,10 @@ class StationDetailActivity : AppCompatActivity(){
         var rs = db.rawQuery("SELECT * FROM PICTURE WHERE ID_station = $id", null)
 
         while (rs.moveToNext()) {
-            var picture = Picture(rs.getInt(0), rs.getString(1), rs.getBlob(2))
+            var picture = Picture(rs.getInt(0), rs.getString(1), rs.getBlob(2),rs.getString(4))
             listPicture.add(picture)
         }
+
 
         recyclerView = findViewById(R.id.recycler_picture_list)
         recyclerView.layoutManager = LinearLayoutManager(this)

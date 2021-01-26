@@ -19,6 +19,9 @@ import com.example.instabus.DBHelper.DBHelper
 import com.example.instabus.Utils.Utils
 import kotlinx.android.synthetic.main.activity_take_picture.*
 import kotlinx.android.synthetic.main.station_item.imageView
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 private var REQUEST_CODE = 42
 
@@ -45,8 +48,11 @@ class TakePictureActivity : AppCompatActivity() {
             val title = title_image.text.toString()
 
             if(!TextUtils.isEmpty(title_image.text.toString())) {
+                val sdf = SimpleDateFormat("dd/M/yyyy")
+                val currentDate = sdf.format(Date())
+                println(currentDate)
                 DBHelper(applicationContext)
-                    .addBitmap(id!!.toInt(), title, Utils.getBytes(bitmap))
+                    .addBitmap(id!!.toInt(), title, Utils.getBytes(bitmap),currentDate)
                 val intent = Intent(this, StationDetailActivity::class.java)
                 intent.putExtra("id",id)
                 intent.putExtra("street_name",street_name)

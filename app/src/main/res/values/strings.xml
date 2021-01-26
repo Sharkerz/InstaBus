@@ -8,4 +8,6 @@
     <!-- Layout create picture -->
     <string name="OK">Enregistrer</string>
     <string name="placeHolderTakePicture">Titre de l\'image</string>
+    <string name="date">Date</string>
+
 </resources>

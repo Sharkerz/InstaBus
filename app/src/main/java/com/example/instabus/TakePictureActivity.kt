@@ -50,7 +50,6 @@ class TakePictureActivity : AppCompatActivity() {
             if(!TextUtils.isEmpty(title_image.text.toString())) {
                 val sdf = SimpleDateFormat("dd/M/yyyy")
                 val currentDate = sdf.format(Date())
-                println(currentDate)
                 DBHelper(applicationContext)
                     .addBitmap(id!!.toInt(), title, Utils.getBytes(bitmap),currentDate)
                 val intent = Intent(this, StationDetailActivity::class.java)
